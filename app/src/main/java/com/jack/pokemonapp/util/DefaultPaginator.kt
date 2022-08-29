@@ -1,6 +1,6 @@
 package com.jack.pokemonapp.util
 
-class DefaultPagintor<Key, Item>(
+class DefaultPaginator<Key, Item>(
     private val initialKey: Key,
     private inline val onLoadUpdated: (Boolean) -> Unit,
     private inline val onRequest: suspend (nextKey: Key) -> Resource<List<Item>>,

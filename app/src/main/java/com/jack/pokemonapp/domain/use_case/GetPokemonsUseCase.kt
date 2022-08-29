@@ -17,7 +17,7 @@ class GetPokemonsUseCase @Inject constructor(
         return repository.getPokemons(page, pageSize)
     }
 
-    suspend fun getAllPokemons(): List<PokeRedu> {
+    suspend fun getAllPokemons(): Resource<List<PokeRedu>> {
         return repository.getAllPokemons(0, AMOUNT)
     }
 }

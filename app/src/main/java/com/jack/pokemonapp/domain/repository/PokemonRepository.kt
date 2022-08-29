@@ -11,7 +11,7 @@ interface PokemonRepository {
 
     suspend fun getPokemon(id: Int): Resource<Pokemon>
 
-    suspend fun getAllPokemons(init: Int, limit: Int): List<PokeRedu>
+    suspend fun getAllPokemons(init: Int, limit: Int): Resource<List<PokeRedu>>
 
     suspend fun getSpecies(id: Int)
 

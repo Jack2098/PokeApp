@@ -92,9 +92,24 @@ class PokemonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllPokemons(init: Int, limit: Int): List<PokeRedu> {
-        val response = api.getAllPokemons(offset = init, limit = limit).results
-        return response.map { it.toPokeRedu() }
+    override suspend fun getAllPokemons(init: Int, limit: Int): Resource<List<PokeRedu>> {
+
+        return try {
+            val response = api.getAllPokemons(offset = init, limit = limit).results.map { it.toPokeRedu() }
+            Resource.Success(response)
+        } catch (e: HttpException) {
+            Resource.Error(
+                message = "Oop, something went wrong",
+                data = null
+            )
+        } catch (e: IOException) {
+            Resource.Error(
+                message = "Oop, Couldn't reach server, check your internet connection",
+                data = null
+            )
+        }
+
+
     }
 
     override suspend fun getSpecies(id: Int) {

@@ -1,5 +1,8 @@
 package com.jack.pokemonapp.presentation.home
 
+import android.util.DisplayMetrics
+import android.util.Log
+import android.view.WindowManager
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -128,11 +131,10 @@ fun HomeScreen(
                                     ShowLoading()
                                 }
                             }
-                            state.error?.let {
-                                item {
-                                    ShowError(error = it)
-                                }
-                            }
+
+                        }
+                        state.error?.let {
+                            ShowError(error = it)
                         }
                     }
 
@@ -331,9 +333,7 @@ fun SearchBar(
 fun ShowLoading() {
     Row(
         modifier = Modifier
-            .absoluteOffset(x = 100.dp)
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.Center
+            .absoluteOffset(x = 150.dp),
     ) {
         CircularProgressIndicator()
     }
@@ -341,10 +341,15 @@ fun ShowLoading() {
 
 @Composable
 fun ShowError(error: String) {
-    Text(
-        text = error,
-        color = Color.Red,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
-    )
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = error,
+            color = Color.Red,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+    }
 }

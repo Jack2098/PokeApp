@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.jack.pokemonapp.domain.model.PokeRedu
 import com.jack.pokemonapp.domain.use_case.GetPokemonListByTypeUseCase
 import com.jack.pokemonapp.domain.use_case.GetPokemonsUseCase
-import com.jack.pokemonapp.util.DefaultPagintor
+import com.jack.pokemonapp.util.DefaultPaginator
 import com.jack.pokemonapp.util.RANGE
 import com.jack.pokemonapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +34,21 @@ class HomeViewModel @Inject constructor(
 
     fun getAllPokemons() {
         viewModelScope.launch {
-            cachedPokemonList = getPokemonsUseCase.getAllPokemons()
+
+            val result = getPokemonsUseCase.getAllPokemons()
+            when (result) {
+                is Resource.Error -> {
+                    state = state.copy(
+                        isLoading = false,
+                        error = result.message
+                    )
+                }
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    cachedPokemonList = result.data!!
+                }
+            }
         }
     }
 
@@ -61,7 +75,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private val pagintor = DefaultPagintor<Int, PokeRedu>(
+    private val pagintor = DefaultPaginator<Int, PokeRedu>(
         initialKey = state.page,
         onLoadUpdated = {
             state = state.copy(isLoading = it, error = null)
@@ -147,7 +161,8 @@ class HomeViewModel @Inject constructor(
     fun loadNextItems() {
         viewModelScope.launch {
             state = state.copy(
-                isLoading = true
+                isLoading = true,
+                error = null
             )
             delay(2000L)
             pagintor.loadNextItems()
